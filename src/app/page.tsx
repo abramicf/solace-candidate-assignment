@@ -46,28 +46,32 @@ export default function Home() {
 
   return (
     <main style={{ margin: "24px" }}>
-      <h1 className="text-3xl font-bold text-blue-600">Solace Advocates</h1>
+      <h1 className="text-5xl font-bold text-green-900">Solace Advocates</h1>
       <br />
       <br />
       <div>
-        <p>Search</p>
+        {/* <p>Search</p> */}
         <p>
           Searching for: <span id="search-term"></span>
         </p>
-        <input id="filter-input" style={{ border: "1px solid black" }} onChange={onChange} />
+        <input 
+          id="filter-input"
+          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md"
+          onChange={onChange}
+        />
         <button 
           disabled={buttonDisabled}
           className={
-            "text-white font-bold px-4 rounded " 
-            + (!buttonDisabled ? "bg-blue-500 hover:bg-blue-700" : "bg-blue-200")
+            "mx-4 text-white px-4 rounded-md " 
+            + (!buttonDisabled ? "bg-green-900 hover:bg-green-950" : "bg-green-800")
           }
           onClick={onClick}>Reset Search</button>
       </div>
       <br />
       <br />
       <div className="relative overflow-x-auto shadow-md sm:rounded-md">
-        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <table className="w-full text-sm text-left rtl:text-right text-gray-800">
+          <thead className="text-xs dark:bg-green-900 dark:text-white">
             <tr>
               <th scope="col" className="px-6 py-3">First Name</th>
               <th scope="col" className="px-6 py-3">Last Name</th>
@@ -81,7 +85,7 @@ export default function Home() {
           <tbody>
             {filteredAdvocates.map((advocate) => {
               return (
-                <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
+                <tr className="odd:bg-white odd:dark:bg-gray-200 even:bg-gray-50 even:dark:bg-gray-100 border-b dark:border-gray-700 border-gray-200">
                   <td className="px-6 py-4">{advocate.firstName}</td>
                   <td className="px-6 py-4">{advocate.lastName}</td>
                   <td className="px-6 py-4">{advocate.city}</td>
@@ -92,7 +96,7 @@ export default function Home() {
                     ))}
                   </td>
                   <td>{advocate.yearsOfExperience}</td>
-                  <td>{advocate.phoneNumber}</td>
+                  <td >{advocate.phoneNumber}</td>
                 </tr>
               );
             })}
