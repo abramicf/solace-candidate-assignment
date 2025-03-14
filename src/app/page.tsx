@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 export default function Home() {
   const [advocates, setAdvocates] = useState([]);
   const [filteredAdvocates, setFilteredAdvocates] = useState([]);
-
+  const [buttonDisabled, setButtonDisabled] = useState(true);
   useEffect(() => {
     console.log("fetching advocates...");
     fetch("/api/advocates").then((response) => {
@@ -20,7 +20,7 @@ export default function Home() {
     const searchTerm = e.target.value;
 
     document.getElementById("search-term").innerHTML = searchTerm;
-
+    setButtonDisabled(false)
     console.log("filtering advocates...");
     const filteredAdvocates = advocates.filter((advocate) => {
       return (
@@ -39,14 +39,14 @@ export default function Home() {
   const onClick = () => {
     document.getElementById("search-term").innerHTML = '';
     document.getElementById("filter-input").value = '';
-
+    setButtonDisabled(true)
     console.log(advocates);
     setFilteredAdvocates(advocates);
   };
 
   return (
     <main style={{ margin: "24px" }}>
-      <h1>Solace Advocates</h1>
+      <h1 className="text-3xl font-bold text-blue-600">Solace Advocates</h1>
       <br />
       <br />
       <div>
@@ -55,7 +55,13 @@ export default function Home() {
           Searching for: <span id="search-term"></span>
         </p>
         <input id="filter-input" style={{ border: "1px solid black" }} onChange={onChange} />
-        <button onClick={onClick}>Reset Search</button>
+        <button 
+          disabled={buttonDisabled}
+          className={
+            "text-white font-bold px-4 rounded " 
+            + (!buttonDisabled ? "bg-blue-500 hover:bg-blue-700" : "bg-blue-200")
+          }
+          onClick={onClick}>Reset Search</button>
       </div>
       <br />
       <br />
