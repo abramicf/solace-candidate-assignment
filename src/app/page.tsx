@@ -59,38 +59,40 @@ export default function Home() {
       </div>
       <br />
       <br />
-      <table>
-        <thead>
-          <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>City</th>
-            <th>Degree</th>
-            <th>Specialties</th>
-            <th>Years of Experience</th>
-            <th>Phone Number</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredAdvocates.map((advocate) => {
-            return (
-              <tr>
-                <td>{advocate.firstName}</td>
-                <td>{advocate.lastName}</td>
-                <td>{advocate.city}</td>
-                <td>{advocate.degree}</td>
-                <td>
-                  {advocate.specialties.map((s) => (
-                    <div>{s}</div>
-                  ))}
-                </td>
-                <td>{advocate.yearsOfExperience}</td>
-                <td>{advocate.phoneNumber}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+      <div className="relative overflow-x-auto shadow-md sm:rounded-md">
+        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+              <th scope="col" className="px-6 py-3">First Name</th>
+              <th scope="col" className="px-6 py-3">Last Name</th>
+              <th scope="col" className="px-6 py-3">City</th>
+              <th scope="col" className="px-6 py-3">Degree</th>
+              <th scope="col" className="px-6 py-3">Specialties</th>
+              <th scope="col" className="px-6 py-3">Years of Experience</th>
+              <th scope="col" className="px-6 py-3">Phone Number</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredAdvocates.map((advocate) => {
+              return (
+                <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
+                  <td className="px-6 py-4">{advocate.firstName}</td>
+                  <td className="px-6 py-4">{advocate.lastName}</td>
+                  <td className="px-6 py-4">{advocate.city}</td>
+                  <td className="px-6 py-4">{advocate.degree}</td>
+                  <td className="px-6 py-4">
+                    {advocate.specialties.map((s) => (
+                      <div>{s}</div>
+                    ))}
+                  </td>
+                  <td>{advocate.yearsOfExperience}</td>
+                  <td>{advocate.phoneNumber}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
     </main>
   );
 }
