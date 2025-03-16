@@ -6,10 +6,10 @@ https://github.com/abramicf/solace-candidate-assignment/compare/06ea9bb..296e796
 
 NOTE: Some of the files marked as changed (.eslintrc.json, gitignore, .env) are part of the original repo with no changes made.  The bulk of the substantive changes are made in these files:
 
-src/app/api/advocates/route.ts
-src/app/globals.css
-src/app/page.tsx
-tailwind.config.ts
+- src/app/api/advocates/route.ts
+- src/app/globals.css
+- src/app/page.tsx
+- tailwind.config.ts
 
 ## One - Fixed Bugs
 
