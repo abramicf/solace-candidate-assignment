@@ -121,23 +121,23 @@ export default function Home() {
 
   return (
     <main style={{ margin: "24px" }}>
-      <h1 className="text-5xl font-bold text-green-900">Solace Advocates</h1>
+      <h1 className="text-5xl font-mollie text-primary-500">Solace Advocates</h1>
       <br />
       <br />
       <div>
-        <p>
+        <p className="font-mollie">
           Searching for: <span id="search-term"></span>
         </p>
         <input 
           id="filter-input"
-          className="text-3xl bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md"
+          className="text-3xl bg-gray-50 border border-gray-300 text-gray-900 rounded-md"
           onChange={onChange}
         />
         <button 
           disabled={buttonDisabled}
           className={
-            "text-3xl mx-4 text-white px-4 rounded-md " 
-            + (!buttonDisabled ? "bg-green-900 hover:bg-green-950" : "bg-green-800")
+            "text-3xl mx-4 text-white px-4 rounded-md bg-secondary-500 " 
+            + (!buttonDisabled ? "hover:bg-secondary-700" : "opacity-50")
           }
           onClick={onClick}>Reset Search</button>
       </div>
@@ -163,7 +163,7 @@ export default function Home() {
                 <tr
                   key={advocate.id}
                   ref={isLastElement ? lastAdvocateElementRef : null}
-                  className="odd:bg-white odd:dark:bg-gray-200 even:dark:bg-gray-100 border-b dark:border-gray-700 border-gray-200">
+                  className="bg-white border-b border-gray-200 hover:bg-gray-50">
                   <td className="px-6 py-4">{advocate.firstName}</td>
                   <td className="px-6 py-4">{advocate.lastName}</td>
                   <td className="px-6 py-4">{advocate.city}</td>
