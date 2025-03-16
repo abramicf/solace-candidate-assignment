@@ -121,14 +121,7 @@ export default function Home() {
 
   return (
     <main style={{ margin: "24px" }}>
-      <div className="flex flex-row items-center justify-between w-full mb-8">
-        <h1 className="text-5xl font-mollie text-primary-500">Solace Advocates</h1>
-        <img 
-          src="/favicon.ico" 
-          alt="Solace Logo" 
-          className="h-12 w-12"
-        />
-      </div>
+      <h1 className="text-5xl font-mollie text-primary-500 mb-8">Solace Advocates</h1>
       <p className="font-mollie">
           Searching for: <span id="search-term"></span>
       </p>
@@ -155,7 +148,7 @@ export default function Home() {
       <br />
       <div className="relative overflow-x-auto shadow-md sm:rounded-md">
         <table className="w-full text-lg text-left rtl:text-right text-gray-800">
-          <thead className="text-lg bg-neutral-200 text-primary-800 font-mollie bold sticky top-0">
+          <thead className="text-lg bg-neutral-200 text-primary-800 font-mollie">
             <tr>
               <th scope="col" className="px-6 py-3">First Name</th>
               <th scope="col" className="px-6 py-3">Last Name</th>
