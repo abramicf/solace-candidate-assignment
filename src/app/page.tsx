@@ -1,42 +1,99 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { v4 as uuidv4 } from 'uuid';
 
+interface Advocate {
+  id: number;
+  firstName: string;
+  lastName: string;
+  city: string;
+  degree: string;
+  specialties: string[];
+  yearsOfExperience: number;
+  phoneNumber: number;
+}
+
+interface PaginationInfo {
+  total: number;
+  limit: number;
+  offset: number;
+}
+
 export default function Home() {
-  const [advocates, setAdvocates] = useState([]);
-  const [filteredAdvocates, setFilteredAdvocates] = useState([]);
+  const [advocates, setAdvocates] = useState<Advocate[]>([]);
+  const [filteredAdvocates, setFilteredAdvocates] = useState<Advocate[]>([]);
   const [buttonDisabled, setButtonDisabled] = useState(true);
-  useEffect(() => {
-    console.log("fetching advocates...");
-    fetch("/api/advocates").then((response) => {
-      response.json().then((jsonResponse) => {
-        setAdvocates(jsonResponse.data);
-        setFilteredAdvocates(jsonResponse.data);
-      });
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [pagination, setPagination] = useState<PaginationInfo>({
+    total: 0,
+    limit: 10,
+    offset: 0
+  });
+
+  const observer = useRef<IntersectionObserver>();
+  const lastAdvocateElementRef = useCallback((node: HTMLElement | null) => {
+    if (loading) return;
+    if (observer.current) observer.current.disconnect();
+    observer.current = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && hasMore) {
+        fetchMoreAdvocates();
+      }
     });
+    if (node) observer.current.observe(node);
+  }, [loading, hasMore]);
+
+  const fetchAdvocates = async (offset = 0) => {
+    try {
+      setLoading(true);
+      const response = await fetch(`/api/advocates?limit=${pagination.limit}&offset=${offset}`);
+      const { data, pagination: paginationInfo } = await response.json();
+      
+      if (offset === 0) {
+        setAdvocates(data);
+        setFilteredAdvocates(data);
+      } else {
+        setAdvocates(prev => [...prev, ...data]);
+        setFilteredAdvocates(prev => [...prev, ...data]);
+      }
+      
+      setPagination(paginationInfo);
+      setHasMore(data.length > 0 && (offset + data.length) < paginationInfo.total);
+    } catch (error) {
+      console.error('Error fetching advocates:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchMoreAdvocates = () => {
+    if (!loading && hasMore) {
+      fetchAdvocates(pagination.offset + pagination.limit);
+    }
+  };
+
+  useEffect(() => {
+    fetchAdvocates();
   }, []);
 
-  const onChange = (e) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const searchTerm = e.target.value;
 
-    document.getElementById("search-term").innerHTML = searchTerm;
-    setButtonDisabled(false)
-    console.log("filtering advocates...");
-    console.log('Advocates:', advocates);
+    const searchTermElement = document.getElementById("search-term");
+    if (searchTermElement) {
+      searchTermElement.innerHTML = searchTerm;
+    }
+    
+    setButtonDisabled(false);
     const filteredAdvocates = advocates.filter((advocate) => {
       return (
-        advocate.firstName.includes(searchTerm) ||
-        advocate.firstName.toLowerCase().includes(searchTerm) ||
-        advocate.lastName.includes(searchTerm) ||
-        advocate.lastName.toLowerCase().includes(searchTerm) ||
-        advocate.city.includes(searchTerm) ||
-        advocate.city.toLowerCase().includes(searchTerm) ||
-        advocate.degree.includes(searchTerm) ||
-        advocate.degree.toLowerCase().includes(searchTerm) ||
-        advocate.specialties.toString().includes(searchTerm) ||
-        advocate.specialties.toString().toLowerCase().includes(searchTerm) ||
-        advocate.yearsOfExperience.toString().includes(searchTerm) // includes is meant for strings or arrays - this change keeps years of experience in the filter
+        advocate.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        advocate.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        advocate.city.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        advocate.degree.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        advocate.specialties.some(s => s.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        advocate.yearsOfExperience.toString().includes(searchTerm)
       );
     });
 
@@ -44,10 +101,17 @@ export default function Home() {
   };
 
   const onClick = () => {
-    document.getElementById("search-term").innerHTML = '';
-    document.getElementById("filter-input").value = '';
-    setButtonDisabled(true)
-    console.log(advocates);
+    const searchTermElement = document.getElementById("search-term");
+    const filterInput = document.getElementById("filter-input") as HTMLInputElement;
+    
+    if (searchTermElement) {
+      searchTermElement.innerHTML = '';
+    }
+    if (filterInput) {
+      filterInput.value = '';
+    }
+    
+    setButtonDisabled(true);
     setFilteredAdvocates(advocates);
   };
 
@@ -57,7 +121,6 @@ export default function Home() {
       <br />
       <br />
       <div>
-        {/* <p>Search</p> */}
         <p>
           Searching for: <span id="search-term"></span>
         </p>
@@ -90,10 +153,12 @@ export default function Home() {
             </tr>
           </thead>
           <tbody>
-            {filteredAdvocates.map((advocate) => {
+            {filteredAdvocates.map((advocate, index) => {
+              const isLastElement = index === filteredAdvocates.length - 1;
               return (
                 <tr
                   key={advocate.id}
+                  ref={isLastElement ? lastAdvocateElementRef : null}
                   className="odd:bg-white odd:dark:bg-gray-200 even:dark:bg-gray-100 border-b dark:border-gray-700 border-gray-200">
                   <td className="px-6 py-4">{advocate.firstName}</td>
                   <td className="px-6 py-4">{advocate.lastName}</td>
@@ -111,6 +176,11 @@ export default function Home() {
             })}
           </tbody>
         </table>
+        {loading && (
+          <div className="text-center py-4">
+            <p className="text-gray-600">Loading more advocates...</p>
+          </div>
+        )}
       </div>
     </main>
   );
