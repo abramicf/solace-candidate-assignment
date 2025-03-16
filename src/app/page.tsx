@@ -3,6 +3,8 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import { v4 as uuidv4 } from 'uuid';
 
+import { formatPhoneNumber } from "./utils";
+
 interface Advocate {
   id: number;
   firstName: string;
@@ -28,7 +30,7 @@ export default function Home() {
   const [hasMore, setHasMore] = useState(true);
   const [pagination, setPagination] = useState<PaginationInfo>({
     total: 0,
-    limit: 10,
+    limit: 2,
     offset: 0
   });
 
@@ -170,7 +172,7 @@ export default function Home() {
                     ))}
                   </td>
                   <td className="px-6 py-4">{advocate.yearsOfExperience}</td>
-                  <td className="px-6 py-4">{advocate.phoneNumber}</td>
+                  <td className="px-6 py-4">{formatPhoneNumber(advocate.phoneNumber.toString())}</td>
                 </tr>
               );
             })}
