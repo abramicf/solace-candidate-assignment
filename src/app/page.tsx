@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useCallback, useRef } from "react";
 import { v4 as uuidv4 } from 'uuid';
-
 import { formatPhoneNumber } from "./utils";
 
 interface Advocate {
@@ -24,10 +23,10 @@ interface PaginationInfo {
 
 export default function Home() {
   const [advocates, setAdvocates] = useState<Advocate[]>([]);
-  const [filteredAdvocates, setFilteredAdvocates] = useState<Advocate[]>([]);
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
   const [pagination, setPagination] = useState<PaginationInfo>({
     total: 0,
     limit: 2,
@@ -44,20 +43,24 @@ export default function Home() {
       }
     });
     if (node) observer.current.observe(node);
-  }, [loading, hasMore, pagination]);
+  }, [loading, hasMore]);
 
-  const fetchAdvocates = async (offset = 0) => {
+  const fetchAdvocates = async (offset = 0, search = searchTerm) => {
     try {
       setLoading(true);
-      const response = await fetch(`/api/advocates?limit=${pagination.limit}&offset=${offset}`);
+      const params = new URLSearchParams({
+        limit: pagination.limit.toString(),
+        offset: offset.toString(),
+        ...(search && { search })
+      });
+
+      const response = await fetch(`/api/advocates?${params}`);
       const { data, pagination: paginationInfo } = await response.json();
       
       if (offset === 0) {
         setAdvocates(data);
-        setFilteredAdvocates(data);
       } else {
         setAdvocates(prev => [...prev, ...data]);
-        setFilteredAdvocates(prev => [...prev, ...data]);
       }
       
       setPagination(paginationInfo);
@@ -79,27 +82,25 @@ export default function Home() {
     fetchAdvocates();
   }, []);
 
+  // Debounce search to avoid too many API calls
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      fetchAdvocates(0, searchTerm);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
+
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const searchTerm = e.target.value;
+    const newSearchTerm = e.target.value;
+    setSearchTerm(newSearchTerm);
 
     const searchTermElement = document.getElementById("search-term");
     if (searchTermElement) {
-      searchTermElement.innerHTML = searchTerm;
+      searchTermElement.innerHTML = newSearchTerm;
     }
     
     setButtonDisabled(false);
-    const filteredAdvocates = advocates.filter((advocate) => {
-      return (
-        advocate.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        advocate.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        advocate.city.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        advocate.degree.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        advocate.specialties.some(s => s.toLowerCase().includes(searchTerm.toLowerCase())) ||
-        advocate.yearsOfExperience.toString().includes(searchTerm)
-      );
-    });
-
-    setFilteredAdvocates(filteredAdvocates);
   };
 
   const onClick = () => {
@@ -114,7 +115,8 @@ export default function Home() {
     }
     
     setButtonDisabled(true);
-    setFilteredAdvocates(advocates);
+    setSearchTerm("");
+    fetchAdvocates(0, "");
   };
 
   return (
@@ -155,8 +157,8 @@ export default function Home() {
             </tr>
           </thead>
           <tbody>
-            {filteredAdvocates.map((advocate, index) => {
-              const isLastElement = index === filteredAdvocates.length - 1;
+            {advocates.map((advocate, index) => {
+              const isLastElement = index === advocates.length - 1;
               return (
                 <tr
                   key={advocate.id}
