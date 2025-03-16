@@ -126,7 +126,7 @@ export default function Home() {
           Searching for: <span id="search-term"></span>
       </p>
       <div className="flex flex-row items-center justify-between w-full">
-        <div className="flex flex-row text-3xl">
+        <div className="text-3xl">
           <input
             id="filter-input"
             className="bg-gray-50 border border-gray-300 text-gray-900 rounded-md"

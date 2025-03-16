@@ -9,7 +9,6 @@ export async function GET(request: NextRequest) {
   const limit = parseInt(searchParams.get('limit') || '10');
   const offset = parseInt(searchParams.get('offset') || '0');
   const searchTerm = searchParams.get('search')?.toLowerCase() || '';
-  console.log('SEARCH TERM:', searchTerm);
   const searchCondition = searchTerm ? 
     or(
       ilike(advocates.firstName, `%${searchTerm}%`),
@@ -17,10 +16,14 @@ export async function GET(request: NextRequest) {
       ilike(advocates.city, `%${searchTerm}%`),
       ilike(advocates.degree, `%${searchTerm}%`),
       sql`${advocates.yearsOfExperience}::text ILIKE ${`%${searchTerm}%`}`,
+      // BACKEND QUERY BY SPECIALTIES GOES HERE
+      // CHRIS TODO - How the json_array_elements_text drills down into the column visa-vis the schema will
+      // return the text elements that we need to search on.  
       // sql`EXISTS (
       //   SELECT 1 FROM jsonb_array_elements_text(${advocates.specialties} -> 'payload') AS specialty
       //   WHERE specialty ILIKE ${`%${searchTerm}%`}
       // )`
+      // BACKEND QUERY BY PHONE NUMBER GOES HERE
     ) : undefined;
 
   // Get total count for pagination info with search

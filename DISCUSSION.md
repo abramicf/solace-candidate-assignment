@@ -50,8 +50,12 @@ Response Format:
 
 ## Four - What I would work on next
 
-1.  Potential bug on edge case
-2.  For readability and reusability I'd have simple subcomponents that create the individual th and td elements so that the formatting does not need to be repeated
-3.  There is likely additional simplification in the formatting using tailwind that can be accomplished through inheritance
-4.  Download the Mollie Glaston font (currently the urls return 404 because the files are not present because they need to be purchsed)
+1.  There appears to be a needless rerender on initial page load.  It's subtle but it's there.  Also, 
+it would be nice to have the headers be of fixed width, so that their width does not change when the data get returned
+2.  Enable backend filtering on phone number and specialities
+3.  For readability and reusability I'd have simple subcomponents that create the individual th and td elements so that the formatting does not need to be repeated
+4.  There is likely additional simplification in the formatting using tailwind that can be accomplished through inheritance
+5.  Download the Mollie Glaston font (currently the urls return 404 because the files are not present because they need to be purchsed)
+6.  Further increase the debounce on search to further limit calls to the API
+7.  It would be good to have the table header row be 'sticky' so that is remains place during scrolling
 
