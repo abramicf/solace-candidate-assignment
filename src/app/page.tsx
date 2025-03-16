@@ -121,9 +121,14 @@ export default function Home() {
 
   return (
     <main style={{ margin: "24px" }}>
-      <h1 className="text-5xl font-mollie text-primary-500">Solace Advocates</h1>
-      <br />
-      <br />
+      <div className="flex flex-row items-center justify-between w-full mb-8">
+        <h1 className="text-5xl font-mollie text-primary-500">Solace Advocates</h1>
+        <img 
+          src="/favicon.ico" 
+          alt="Solace Logo" 
+          className="h-12 w-12"
+        />
+      </div>
       <p className="font-mollie">
           Searching for: <span id="search-term"></span>
       </p>
