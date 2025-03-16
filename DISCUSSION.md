@@ -48,7 +48,11 @@ Response Format:
 5.  Added total count display
 6.  Added capability for Mollie Glaston font, which appears to be Solace's signature font.  Files need to be purchased and downloaded and loaded into the app - app currently renders in backup 'cursive' font.
 
-## Four - What I would work on next
+## Four - Demo
+
+![Pic One](images/one.png)
+
+## Five - What I would work on next
 
 1.  There appears to be a needless rerender on initial page load.  It's subtle but it's there.  Also, 
 it would be nice to have the headers be of fixed width, so that their width does not change when the data get returned
