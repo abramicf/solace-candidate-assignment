@@ -4,6 +4,13 @@ Hello!  Thank you for reviewing this coding assessment - I made a number of chan
 
 https://github.com/abramicf/solace-candidate-assignment/compare/06ea9bb..296e796
 
+NOTE: Some of the files marked as changed (.eslintrc.json, gitignore, .env) are part of the original repo with no changes made.  The bulk of the substantive changes are made in these files:
+
+src/app/api/advocates/route.ts
+src/app/globals.css
+src/app/page.tsx
+tailwind.config.ts
+
 ## One - Fixed Bugs
 
 1.  Fixed hydration error that shows up on initial page load [in this commit](https://github.com/abramicf/solace-candidate-assignment/commit/2e616e07b55139bb8e8a77d1ada4543d811e4466)
