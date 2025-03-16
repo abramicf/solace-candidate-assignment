@@ -124,28 +124,33 @@ export default function Home() {
       <h1 className="text-5xl font-mollie text-primary-500">Solace Advocates</h1>
       <br />
       <br />
-      <div>
-        <p className="font-mollie">
+      <p className="font-mollie">
           Searching for: <span id="search-term"></span>
-        </p>
-        <input 
-          id="filter-input"
-          className="text-3xl bg-gray-50 border border-gray-300 text-gray-900 rounded-md"
-          onChange={onChange}
-        />
-        <button 
-          disabled={buttonDisabled}
-          className={
-            "text-3xl mx-4 text-white px-4 rounded-md bg-secondary-500 " 
-            + (!buttonDisabled ? "hover:bg-secondary-700" : "opacity-50")
-          }
-          onClick={onClick}>Reset Search</button>
+      </p>
+      <div className="flex flex-row items-center justify-between w-full">
+        <div className="flex flex-row text-3xl">
+          <input
+            id="filter-input"
+            className="bg-gray-50 border border-gray-300 text-gray-900 rounded-md"
+            onChange={onChange}
+          />
+          <button
+            disabled={buttonDisabled}
+            className={
+              "mx-4 text-white px-4 rounded-md bg-secondary-500 "
+              + (!buttonDisabled ? "hover:bg-secondary-700" : "opacity-50")
+            }
+            onClick={onClick}>
+              Reset Search
+          </button>
+        </div>
+        <div className="font-mollie text-3xl text-primary-500">Total: {pagination.total}</div>
       </div>
       <br />
       <br />
       <div className="relative overflow-x-auto shadow-md sm:rounded-md">
         <table className="w-full text-lg text-left rtl:text-right text-gray-800">
-          <thead className="text-lg dark:bg-green-900 dark:text-white">
+          <thead className="text-lg bg-neutral-200 text-primary-800 font-mollie bold sticky top-0">
             <tr>
               <th scope="col" className="px-6 py-3">First Name</th>
               <th scope="col" className="px-6 py-3">Last Name</th>
