@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { v4 as uuidv4 } from 'uuid';
 
 export default function Home() {
   const [advocates, setAdvocates] = useState([]);
@@ -22,6 +23,7 @@ export default function Home() {
     document.getElementById("search-term").innerHTML = searchTerm;
     setButtonDisabled(false)
     console.log("filtering advocates...");
+    console.log('Advocates:', advocates);
     const filteredAdvocates = advocates.filter((advocate) => {
       return (
         advocate.firstName.includes(searchTerm) ||
@@ -90,14 +92,16 @@ export default function Home() {
           <tbody>
             {filteredAdvocates.map((advocate) => {
               return (
-                <tr className="odd:bg-white odd:dark:bg-gray-200 even:dark:bg-gray-100 border-b dark:border-gray-700 border-gray-200">
+                <tr
+                  key={advocate.id}
+                  className="odd:bg-white odd:dark:bg-gray-200 even:dark:bg-gray-100 border-b dark:border-gray-700 border-gray-200">
                   <td className="px-6 py-4">{advocate.firstName}</td>
                   <td className="px-6 py-4">{advocate.lastName}</td>
                   <td className="px-6 py-4">{advocate.city}</td>
                   <td className="px-6 py-4">{advocate.degree}</td>
                   <td className="px-6 py-4">
                     {advocate.specialties.map((s) => (
-                      <div>{s}</div>
+                      <div key={uuidv4()}>{s}</div>
                     ))}
                   </td>
                   <td className="px-6 py-4">{advocate.yearsOfExperience}</td>
